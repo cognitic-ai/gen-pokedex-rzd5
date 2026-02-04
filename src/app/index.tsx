@@ -422,12 +422,28 @@ export default function PokedexScreen() {
 
       const generation = sections[genIndex].generation;
 
-      // On web, use native scrollIntoView for precise scrolling
+      // On web, find the element and scroll container for precise positioning
       if (process.env.EXPO_OS === "web") {
         const element = document.getElementById(`generation-header-${generation.id}`);
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-          return;
+          // Find the scrollable parent (the SectionList's scroll container)
+          let scrollContainer = element.parentElement;
+          while (scrollContainer && scrollContainer.scrollHeight <= scrollContainer.clientHeight) {
+            scrollContainer = scrollContainer.parentElement;
+          }
+
+          if (scrollContainer) {
+            // Calculate element's position relative to the scroll container
+            const elementRect = element.getBoundingClientRect();
+            const containerRect = scrollContainer.getBoundingClientRect();
+            const relativeTop = elementRect.top - containerRect.top + scrollContainer.scrollTop;
+
+            scrollContainer.scrollTo({
+              top: relativeTop,
+              behavior: "smooth",
+            });
+            return;
+          }
         }
       }
 
