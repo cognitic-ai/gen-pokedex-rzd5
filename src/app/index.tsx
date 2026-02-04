@@ -295,8 +295,16 @@ export default function PokedexScreen() {
   const itemWidth =
     (width - HORIZONTAL_PADDING * 2 - ITEM_MARGIN * NUM_COLUMNS) / NUM_COLUMNS;
 
-  // Row height = card width (square aspect ratio) + padding + text + type badges
-  const rowHeight = itemWidth + 10 + 6 + 12 + 4 + 18 + 8; // ~itemWidth + 58
+  // Row height calculation:
+  // - Card margin: 4 top + 4 bottom = 8
+  // - Card padding: 10 top + 10 bottom = 20
+  // - Image: aspectRatio 1, inner width = itemWidth - 20, so height = itemWidth - 20
+  // - Image marginBottom: 6
+  // - Name text (~16px with fontSize 12): 16
+  // - Name marginBottom: 4
+  // - Type badges (~17px with fontSize 9 + padding): 17
+  // Total: 8 + 20 + (itemWidth - 20) + 6 + 16 + 4 + 17 = itemWidth + 51
+  const rowHeight = itemWidth + 51;
 
   // Setup search bar
   useEffect(() => {
