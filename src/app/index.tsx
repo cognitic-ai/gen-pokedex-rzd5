@@ -215,7 +215,7 @@ export default function PokedexScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const [search, setSearch] = useState("");
-  const sectionListRef = useRef<SectionList>(null);
+  const sectionListRef = useRef<SectionList<Pokemon[], SectionData>>(null);
 
   // Calculate item width for 3 columns
   const numColumns = 3;
@@ -271,7 +271,7 @@ export default function PokedexScreen() {
   );
 
   const renderSectionHeader = useCallback(
-    ({ section }: { section: SectionListData<Pokemon[][], SectionData> }) => (
+    ({ section }: { section: SectionListData<Pokemon[], SectionData> }) => (
       <SectionHeader generation={section.generation} />
     ),
     []
