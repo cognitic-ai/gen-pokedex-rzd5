@@ -393,19 +393,41 @@ export default function PokedexScreen() {
     [rowHeight]
   );
 
+  // Calculate offset to a specific section
+  const getSectionOffset = useCallback(
+    (sectionIndex: number) => {
+      let offset = 0;
+      for (let i = 0; i < sectionIndex && i < sections.length; i++) {
+        offset += SECTION_HEADER_HEIGHT;
+        offset += sections[i].data.length * rowHeight;
+      }
+      return offset;
+    },
+    [sections, rowHeight]
+  );
+
   // Quick jump to generation
   const scrollToGeneration = useCallback(
     (genIndex: number) => {
       if (genIndex < 0 || genIndex >= sections.length) return;
 
-      sectionListRef.current?.scrollToLocation({
-        sectionIndex: genIndex,
-        itemIndex: 0,
-        viewOffset: 0,
-        animated: true,
-      });
+      // Calculate the offset and use getScrollResponder for precise scrolling
+      const offset = getSectionOffset(genIndex);
+      const scrollResponder = (sectionListRef.current as any)?.getScrollResponder?.();
+
+      if (scrollResponder?.scrollTo) {
+        scrollResponder.scrollTo({ y: offset, animated: true });
+      } else {
+        // Fallback to scrollToLocation
+        sectionListRef.current?.scrollToLocation({
+          sectionIndex: genIndex,
+          itemIndex: 0,
+          viewOffset: 0,
+          animated: true,
+        });
+      }
     },
-    [sections.length]
+    [sections.length, getSectionOffset]
   );
 
   // Handle scroll to index failures (fallback)
