@@ -9,7 +9,7 @@ import {
   ListRenderItemInfo,
 } from "react-native";
 import { Image } from "expo-image";
-import AC from "@bacons/apple-colors";
+import { Colors } from "@/utils/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   generations,
@@ -32,7 +32,7 @@ function PokemonCardContent({
     <View
       style={{
         width: itemWidth,
-        backgroundColor: AC.secondarySystemGroupedBackground,
+        backgroundColor: Colors.secondarySystemGroupedBackground,
         borderRadius: 16,
         borderCurve: "continuous",
         padding: 10,
@@ -47,7 +47,7 @@ function PokemonCardContent({
           right: 8,
           fontSize: 10,
           fontWeight: "600",
-          color: AC.tertiaryLabel,
+          color: Colors.tertiaryLabel,
           fontVariant: ["tabular-nums"],
         }}
       >
@@ -74,7 +74,7 @@ function PokemonCardContent({
         style={{
           fontSize: 12,
           fontWeight: "600",
-          color: AC.label,
+          color: Colors.label,
           textAlign: "center",
           marginBottom: 4,
         }}
@@ -229,10 +229,10 @@ export default function GenerationDetailScreen() {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: AC.systemGroupedBackground,
+          backgroundColor: Colors.systemGroupedBackground,
         }}
       >
-        <Text style={{ color: AC.secondaryLabel, fontSize: 17 }}>
+        <Text style={{ color: Colors.secondaryLabel, fontSize: 17 }}>
           Generation not found
         </Text>
       </View>
@@ -266,7 +266,7 @@ export default function GenerationDetailScreen() {
             <Text
               style={{
                 fontSize: 15,
-                color: AC.secondaryLabel,
+                color: Colors.secondaryLabel,
                 marginBottom: 4,
               }}
             >
@@ -276,7 +276,7 @@ export default function GenerationDetailScreen() {
               selectable
               style={{
                 fontSize: 14,
-                color: AC.tertiaryLabel,
+                color: Colors.tertiaryLabel,
               }}
             >
               #{generation.range[0]} - #{generation.range[1]} ·{" "}
@@ -289,7 +289,7 @@ export default function GenerationDetailScreen() {
         windowSize={7}
         removeClippedSubviews
         contentInsetAdjustmentBehavior="automatic"
-        style={{ backgroundColor: AC.systemGroupedBackground }}
+        style={{ backgroundColor: Colors.systemGroupedBackground }}
       />
     </>
   );

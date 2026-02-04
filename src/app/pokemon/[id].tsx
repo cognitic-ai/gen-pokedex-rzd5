@@ -2,7 +2,7 @@ import { useLocalSearchParams, useNavigation, Stack } from "expo-router";
 import { useEffect, useMemo } from "react";
 import { View, Text, ScrollView, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
-import AC from "@bacons/apple-colors";
+import { Colors } from "@/utils/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   generations,
@@ -58,10 +58,10 @@ export default function PokemonDetailScreen() {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: AC.systemGroupedBackground,
+          backgroundColor: Colors.systemGroupedBackground,
         }}
       >
-        <Text style={{ color: AC.secondaryLabel, fontSize: 17 }}>
+        <Text style={{ color: Colors.secondaryLabel, fontSize: 17 }}>
           Pokemon not found
         </Text>
       </View>
@@ -76,7 +76,7 @@ export default function PokemonDetailScreen() {
     <>
       <Stack.Screen options={{ title: pokemon.name }} />
       <ScrollView
-        style={{ flex: 1, backgroundColor: AC.systemGroupedBackground }}
+        style={{ flex: 1, backgroundColor: Colors.systemGroupedBackground }}
         contentContainerStyle={{
           paddingBottom: insets.bottom + 40,
         }}
@@ -97,7 +97,7 @@ export default function PokemonDetailScreen() {
             style={{
               fontSize: 16,
               fontWeight: "700",
-              color: AC.tertiaryLabel,
+              color: Colors.tertiaryLabel,
               fontVariant: ["tabular-nums"],
               marginBottom: 8,
             }}
@@ -127,7 +127,7 @@ export default function PokemonDetailScreen() {
             style={{
               fontSize: 32,
               fontWeight: "700",
-              color: AC.label,
+              color: Colors.label,
               marginBottom: 12,
             }}
           >
@@ -173,7 +173,7 @@ export default function PokemonDetailScreen() {
           {generation && (
             <View
               style={{
-                backgroundColor: AC.secondarySystemGroupedBackground,
+                backgroundColor: Colors.secondarySystemGroupedBackground,
                 borderRadius: 16,
                 borderCurve: "continuous",
                 padding: 16,
@@ -183,7 +183,7 @@ export default function PokemonDetailScreen() {
                 style={{
                   fontSize: 13,
                   fontWeight: "600",
-                  color: AC.secondaryLabel,
+                  color: Colors.secondaryLabel,
                   textTransform: "uppercase",
                   letterSpacing: 0.5,
                   marginBottom: 8,
@@ -195,7 +195,7 @@ export default function PokemonDetailScreen() {
                 style={{
                   fontSize: 17,
                   fontWeight: "600",
-                  color: AC.label,
+                  color: Colors.label,
                   marginBottom: 4,
                 }}
               >
@@ -204,7 +204,7 @@ export default function PokemonDetailScreen() {
               <Text
                 style={{
                   fontSize: 15,
-                  color: AC.secondaryLabel,
+                  color: Colors.secondaryLabel,
                 }}
               >
                 {generation.region} Region
@@ -215,7 +215,7 @@ export default function PokemonDetailScreen() {
           {/* Type Effectiveness Preview */}
           <View
             style={{
-              backgroundColor: AC.secondarySystemGroupedBackground,
+              backgroundColor: Colors.secondarySystemGroupedBackground,
               borderRadius: 16,
               borderCurve: "continuous",
               padding: 16,
@@ -225,7 +225,7 @@ export default function PokemonDetailScreen() {
               style={{
                 fontSize: 13,
                 fontWeight: "600",
-                color: AC.secondaryLabel,
+                color: Colors.secondaryLabel,
                 textTransform: "uppercase",
                 letterSpacing: 0.5,
                 marginBottom: 12,
@@ -254,7 +254,7 @@ export default function PokemonDetailScreen() {
                   <Text
                     style={{
                       fontSize: 15,
-                      color: AC.label,
+                      color: Colors.label,
                       textTransform: "capitalize",
                       flex: 1,
                     }}
@@ -269,7 +269,7 @@ export default function PokemonDetailScreen() {
           {/* Pokedex Entry Placeholder */}
           <View
             style={{
-              backgroundColor: AC.secondarySystemGroupedBackground,
+              backgroundColor: Colors.secondarySystemGroupedBackground,
               borderRadius: 16,
               borderCurve: "continuous",
               padding: 16,
@@ -279,7 +279,7 @@ export default function PokemonDetailScreen() {
               style={{
                 fontSize: 13,
                 fontWeight: "600",
-                color: AC.secondaryLabel,
+                color: Colors.secondaryLabel,
                 textTransform: "uppercase",
                 letterSpacing: 0.5,
                 marginBottom: 8,
@@ -292,7 +292,7 @@ export default function PokemonDetailScreen() {
               style={{
                 fontSize: 28,
                 fontWeight: "700",
-                color: AC.label,
+                color: Colors.label,
                 fontVariant: ["tabular-nums"],
               }}
             >

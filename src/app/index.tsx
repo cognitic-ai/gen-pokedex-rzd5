@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Link, useNavigation } from "expo-router";
 import { Image } from "expo-image";
-import AC from "@bacons/apple-colors";
+import { Colors } from "@/utils/colors";
 import {
   generations,
   Generation,
@@ -35,7 +35,7 @@ function PokemonCardContent({
     <View
       style={{
         width: itemWidth,
-        backgroundColor: AC.secondarySystemGroupedBackground,
+        backgroundColor: Colors.secondarySystemGroupedBackground,
         borderRadius: 16,
         borderCurve: "continuous",
         padding: 10,
@@ -50,7 +50,7 @@ function PokemonCardContent({
           right: 8,
           fontSize: 10,
           fontWeight: "600",
-          color: AC.tertiaryLabel,
+          color: Colors.tertiaryLabel,
           fontVariant: ["tabular-nums"],
         }}
       >
@@ -77,7 +77,7 @@ function PokemonCardContent({
         style={{
           fontSize: 12,
           fontWeight: "600",
-          color: AC.label,
+          color: Colors.label,
           textAlign: "center",
           marginBottom: 4,
         }}
@@ -195,11 +195,11 @@ function SectionHeaderContent({
   return (
     <View
       style={{
-        backgroundColor: AC.systemGroupedBackground,
+        backgroundColor: Colors.systemGroupedBackground,
         paddingHorizontal: 16,
         paddingVertical: 12,
         borderBottomWidth: 0.5,
-        borderBottomColor: AC.separator,
+        borderBottomColor: Colors.separator,
         opacity: pressed ? 0.7 : 1,
       }}
     >
@@ -215,7 +215,7 @@ function SectionHeaderContent({
             style={{
               fontSize: 20,
               fontWeight: "700",
-              color: AC.label,
+              color: Colors.label,
               marginBottom: 2,
             }}
           >
@@ -224,7 +224,7 @@ function SectionHeaderContent({
           <Text
             style={{
               fontSize: 14,
-              color: AC.secondaryLabel,
+              color: Colors.secondaryLabel,
             }}
           >
             {generation.region} · {generation.pokemon.length} Pokémon
@@ -233,7 +233,7 @@ function SectionHeaderContent({
         <Text
           style={{
             fontSize: 14,
-            color: AC.systemBlue,
+            color: Colors.systemBlue,
             fontWeight: "500",
           }}
         >
@@ -362,7 +362,7 @@ export default function PokedexScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: AC.systemGroupedBackground }}>
+    <View style={{ flex: 1, backgroundColor: Colors.systemGroupedBackground }}>
       {/* Generation quick jump bar */}
       <View
         style={{
@@ -371,7 +371,7 @@ export default function PokedexScreen() {
           paddingVertical: 8,
           paddingHorizontal: 8,
           gap: 4,
-          backgroundColor: AC.systemGroupedBackground,
+          backgroundColor: Colors.systemGroupedBackground,
         }}
       >
         {generations.map((gen, index) => (
@@ -382,8 +382,8 @@ export default function PokedexScreen() {
               paddingHorizontal: 10,
               paddingVertical: 6,
               backgroundColor: pressed
-                ? AC.systemFill
-                : AC.tertiarySystemGroupedBackground,
+                ? Colors.systemFill
+                : Colors.tertiarySystemGroupedBackground,
               borderRadius: 8,
               borderCurve: "continuous",
             })}
@@ -392,7 +392,7 @@ export default function PokedexScreen() {
               style={{
                 fontSize: 12,
                 fontWeight: "600",
-                color: AC.label,
+                color: Colors.label,
               }}
             >
               {gen.id}
