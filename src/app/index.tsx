@@ -194,6 +194,7 @@ function SectionHeaderContent({
 }) {
   return (
     <View
+      nativeID={`generation-header-${generation.id}`}
       style={{
         backgroundColor: Colors.systemGroupedBackground,
         paddingHorizontal: 16,
@@ -419,23 +420,26 @@ export default function PokedexScreen() {
     (genIndex: number) => {
       if (genIndex < 0 || genIndex >= sections.length) return;
 
-      // Calculate the offset and use getScrollResponder for precise scrolling
-      const offset = getSectionOffset(genIndex);
-      const scrollResponder = (sectionListRef.current as any)?.getScrollResponder?.();
+      const generation = sections[genIndex].generation;
 
-      if (scrollResponder?.scrollTo) {
-        scrollResponder.scrollTo({ y: offset, animated: true });
-      } else {
-        // Fallback to scrollToLocation
-        sectionListRef.current?.scrollToLocation({
-          sectionIndex: genIndex,
-          itemIndex: 0,
-          viewOffset: 0,
-          animated: true,
-        });
+      // On web, use native scrollIntoView for precise scrolling
+      if (process.env.EXPO_OS === "web") {
+        const element = document.getElementById(`generation-header-${generation.id}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
       }
+
+      // On native, use scrollToLocation
+      sectionListRef.current?.scrollToLocation({
+        sectionIndex: genIndex,
+        itemIndex: 0,
+        viewOffset: 0,
+        animated: true,
+      });
     },
-    [sections.length, getSectionOffset]
+    [sections]
   );
 
   // Handle scroll to index failures (fallback)
