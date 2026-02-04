@@ -21,6 +21,106 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useEffect } from "react";
 
+// Pokemon card content component
+function PokemonCardContent({
+  pokemon,
+  itemWidth,
+  pressed,
+}: {
+  pokemon: Pokemon;
+  itemWidth: number;
+  pressed: boolean;
+}) {
+  return (
+    <View
+      style={{
+        width: itemWidth,
+        backgroundColor: AC.secondarySystemGroupedBackground,
+        borderRadius: 16,
+        borderCurve: "continuous",
+        padding: 10,
+        opacity: pressed ? 0.8 : 1,
+        margin: 4,
+      }}
+    >
+      <Text
+        style={{
+          position: "absolute",
+          top: 6,
+          right: 8,
+          fontSize: 10,
+          fontWeight: "600",
+          color: AC.tertiaryLabel,
+          fontVariant: ["tabular-nums"],
+        }}
+      >
+        #{String(pokemon.id).padStart(4, "0")}
+      </Text>
+
+      <View
+        style={{
+          alignItems: "center",
+          aspectRatio: 1,
+          marginBottom: 6,
+        }}
+      >
+        <Image
+          source={{ uri: getPokemonSpriteUrl(pokemon.id) }}
+          style={{ width: "100%", height: "100%" }}
+          contentFit="contain"
+          recyclingKey={`pokemon-${pokemon.id}`}
+        />
+      </View>
+
+      <Text
+        numberOfLines={1}
+        style={{
+          fontSize: 12,
+          fontWeight: "600",
+          color: AC.label,
+          textAlign: "center",
+          marginBottom: 4,
+        }}
+      >
+        {pokemon.name}
+      </Text>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          gap: 3,
+          flexWrap: "wrap",
+        }}
+      >
+        {pokemon.types.map((type) => (
+          <View
+            key={type}
+            style={{
+              backgroundColor: typeColors[type] || "#A8A878",
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              borderRadius: 8,
+              borderCurve: "continuous",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 9,
+                fontWeight: "600",
+                color: "#fff",
+                textTransform: "capitalize",
+              }}
+            >
+              {type}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
 // Memoized Pokemon card for the grid
 function PokemonGridItem({
   pokemon,
@@ -29,94 +129,33 @@ function PokemonGridItem({
   pokemon: Pokemon;
   itemWidth: number;
 }) {
+  if (process.env.EXPO_OS === "web") {
+    return (
+      <Link href={`/pokemon/${pokemon.id}`} asChild>
+        <Pressable>
+          {({ pressed }) => (
+            <PokemonCardContent
+              pokemon={pokemon}
+              itemWidth={itemWidth}
+              pressed={pressed}
+            />
+          )}
+        </Pressable>
+      </Link>
+    );
+  }
+
   return (
     <Link href={`/pokemon/${pokemon.id}`} asChild>
       <Link.Trigger>
-        <Pressable
-          style={({ pressed }) => ({
-            width: itemWidth,
-            backgroundColor: AC.secondarySystemGroupedBackground,
-            borderRadius: 16,
-            borderCurve: "continuous",
-            padding: 10,
-            opacity: pressed ? 0.8 : 1,
-            margin: 4,
-          })}
-        >
-          <Text
-            style={{
-              position: "absolute",
-              top: 6,
-              right: 8,
-              fontSize: 10,
-              fontWeight: "600",
-              color: AC.tertiaryLabel,
-              fontVariant: ["tabular-nums"],
-            }}
-          >
-            #{String(pokemon.id).padStart(4, "0")}
-          </Text>
-
-          <View
-            style={{
-              alignItems: "center",
-              aspectRatio: 1,
-              marginBottom: 6,
-            }}
-          >
-            <Image
-              source={{ uri: getPokemonSpriteUrl(pokemon.id) }}
-              style={{ width: "100%", height: "100%" }}
-              contentFit="contain"
-              recyclingKey={`pokemon-${pokemon.id}`}
+        <Pressable>
+          {({ pressed }) => (
+            <PokemonCardContent
+              pokemon={pokemon}
+              itemWidth={itemWidth}
+              pressed={pressed}
             />
-          </View>
-
-          <Text
-            numberOfLines={1}
-            style={{
-              fontSize: 12,
-              fontWeight: "600",
-              color: AC.label,
-              textAlign: "center",
-              marginBottom: 4,
-            }}
-          >
-            {pokemon.name}
-          </Text>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              gap: 3,
-              flexWrap: "wrap",
-            }}
-          >
-            {pokemon.types.map((type) => (
-              <View
-                key={type}
-                style={{
-                  backgroundColor: typeColors[type] || "#A8A878",
-                  paddingHorizontal: 6,
-                  paddingVertical: 2,
-                  borderRadius: 8,
-                  borderCurve: "continuous",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 9,
-                    fontWeight: "600",
-                    color: "#fff",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {type}
-                </Text>
-              </View>
-            ))}
-          </View>
+          )}
         </Pressable>
       </Link.Trigger>
       <Link.Preview />
@@ -145,58 +184,87 @@ function PokemonRow({
   );
 }
 
+// Section header content component
+function SectionHeaderContent({
+  generation,
+  pressed,
+}: {
+  generation: Generation;
+  pressed: boolean;
+}) {
+  return (
+    <View
+      style={{
+        backgroundColor: AC.systemGroupedBackground,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderBottomWidth: 0.5,
+        borderBottomColor: AC.separator,
+        opacity: pressed ? 0.7 : 1,
+      }}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <View>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "700",
+              color: AC.label,
+              marginBottom: 2,
+            }}
+          >
+            {generation.name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 14,
+              color: AC.secondaryLabel,
+            }}
+          >
+            {generation.region} · {generation.pokemon.length} Pokémon
+          </Text>
+        </View>
+        <Text
+          style={{
+            fontSize: 14,
+            color: AC.systemBlue,
+            fontWeight: "500",
+          }}
+        >
+          See All
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 // Section header component
 function SectionHeader({ generation }: { generation: Generation }) {
+  if (process.env.EXPO_OS === "web") {
+    return (
+      <Link href={`/generation/${generation.id}`} asChild>
+        <Pressable>
+          {({ pressed }) => (
+            <SectionHeaderContent generation={generation} pressed={pressed} />
+          )}
+        </Pressable>
+      </Link>
+    );
+  }
+
   return (
     <Link href={`/generation/${generation.id}`} asChild>
       <Link.Trigger>
-        <Pressable
-          style={({ pressed }) => ({
-            backgroundColor: AC.systemGroupedBackground,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderBottomWidth: 0.5,
-            borderBottomColor: AC.separator,
-            opacity: pressed ? 0.7 : 1,
-          })}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "700",
-                  color: AC.label,
-                  marginBottom: 2,
-                }}
-              >
-                {generation.name}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: AC.secondaryLabel,
-                }}
-              >
-                {generation.region} · {generation.pokemon.length} Pokémon
-              </Text>
-            </View>
-            <Text
-              style={{
-                fontSize: 14,
-                color: AC.systemBlue,
-                fontWeight: "500",
-              }}
-            >
-              See All
-            </Text>
-          </View>
+        <Pressable>
+          {({ pressed }) => (
+            <SectionHeaderContent generation={generation} pressed={pressed} />
+          )}
         </Pressable>
       </Link.Trigger>
       <Link.Preview />
