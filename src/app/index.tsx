@@ -278,6 +278,12 @@ interface SectionData {
   data: Pokemon[][];
 }
 
+// Layout constants
+const NUM_COLUMNS = 3;
+const HORIZONTAL_PADDING = 16;
+const ITEM_MARGIN = 8;
+const SECTION_HEADER_HEIGHT = 58;
+
 export default function PokedexScreen() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -286,11 +292,11 @@ export default function PokedexScreen() {
   const sectionListRef = useRef<SectionList<Pokemon[], SectionData>>(null);
 
   // Calculate item width for 3 columns
-  const numColumns = 3;
-  const horizontalPadding = 16;
-  const itemMargin = 8;
   const itemWidth =
-    (width - horizontalPadding * 2 - itemMargin * numColumns) / numColumns;
+    (width - HORIZONTAL_PADDING * 2 - ITEM_MARGIN * NUM_COLUMNS) / NUM_COLUMNS;
+
+  // Row height = card width (square aspect ratio) + padding + text + type badges
+  const rowHeight = itemWidth + 10 + 6 + 12 + 4 + 18 + 8; // ~itemWidth + 58
 
   // Setup search bar
   useEffect(() => {
@@ -320,8 +326,8 @@ export default function PokedexScreen() {
 
       // Group Pokemon into rows of 3
       const rows: Pokemon[][] = [];
-      for (let i = 0; i < filteredPokemon.length; i += numColumns) {
-        rows.push(filteredPokemon.slice(i, i + numColumns));
+      for (let i = 0; i < filteredPokemon.length; i += NUM_COLUMNS) {
+        rows.push(filteredPokemon.slice(i, i + NUM_COLUMNS));
       }
 
       return {
@@ -351,29 +357,60 @@ export default function PokedexScreen() {
     []
   );
 
-  // Quick jump to generation - with fallback for web
+  // Calculate getItemLayout for SectionList to enable scrollToLocation
+  const getItemLayout = useCallback(
+    (
+      data: SectionListData<Pokemon[], SectionData>[] | null,
+      index: number
+    ) => {
+      // For SectionList, we need to calculate cumulative offset
+      // Each section has: header + items
+      let offset = 0;
+      let itemIndex = index;
+
+      if (data) {
+        for (const section of data) {
+          // Section header
+          if (itemIndex === 0) {
+            return { length: SECTION_HEADER_HEIGHT, offset, index };
+          }
+          offset += SECTION_HEADER_HEIGHT;
+          itemIndex--;
+
+          // Section items
+          const itemCount = section.data.length;
+          if (itemIndex < itemCount) {
+            offset += itemIndex * rowHeight;
+            return { length: rowHeight, offset, index };
+          }
+          offset += itemCount * rowHeight;
+          itemIndex -= itemCount;
+        }
+      }
+
+      return { length: rowHeight, offset, index };
+    },
+    [rowHeight]
+  );
+
+  // Quick jump to generation
   const scrollToGeneration = useCallback(
     (genIndex: number) => {
       if (genIndex < 0 || genIndex >= sections.length) return;
 
-      try {
-        sectionListRef.current?.scrollToLocation({
-          sectionIndex: genIndex,
-          itemIndex: 0,
-          viewOffset: 0,
-          animated: true,
-        });
-      } catch {
-        // Fallback: scroll to top if scrollToLocation fails
-      }
+      sectionListRef.current?.scrollToLocation({
+        sectionIndex: genIndex,
+        itemIndex: 0,
+        viewOffset: 0,
+        animated: true,
+      });
     },
     [sections.length]
   );
 
-  // Handle scroll to index failures on web
+  // Handle scroll to index failures (fallback)
   const onScrollToIndexFailed = useCallback(
     (info: { index: number; highestMeasuredFrameIndex: number; averageItemLength: number }) => {
-      // Wait for more items to render then try again
       setTimeout(() => {
         sectionListRef.current?.scrollToLocation({
           sectionIndex: 0,
@@ -431,10 +468,11 @@ export default function PokedexScreen() {
         renderItem={renderItem}
         renderSectionHeader={renderSectionHeader}
         keyExtractor={keyExtractor}
+        getItemLayout={getItemLayout}
         stickySectionHeadersEnabled
         onScrollToIndexFailed={onScrollToIndexFailed}
         contentContainerStyle={{
-          paddingHorizontal: horizontalPadding - 4,
+          paddingHorizontal: HORIZONTAL_PADDING - 4,
           paddingBottom: insets.bottom + 20,
         }}
         initialNumToRender={15}
