@@ -351,15 +351,39 @@ export default function PokedexScreen() {
     []
   );
 
-  // Quick jump to generation
-  const scrollToGeneration = useCallback((genIndex: number) => {
-    sectionListRef.current?.scrollToLocation({
-      sectionIndex: genIndex,
-      itemIndex: 0,
-      viewOffset: 0,
-      animated: true,
-    });
-  }, []);
+  // Quick jump to generation - with fallback for web
+  const scrollToGeneration = useCallback(
+    (genIndex: number) => {
+      if (genIndex < 0 || genIndex >= sections.length) return;
+
+      try {
+        sectionListRef.current?.scrollToLocation({
+          sectionIndex: genIndex,
+          itemIndex: 0,
+          viewOffset: 0,
+          animated: true,
+        });
+      } catch {
+        // Fallback: scroll to top if scrollToLocation fails
+      }
+    },
+    [sections.length]
+  );
+
+  // Handle scroll to index failures on web
+  const onScrollToIndexFailed = useCallback(
+    (info: { index: number; highestMeasuredFrameIndex: number; averageItemLength: number }) => {
+      // Wait for more items to render then try again
+      setTimeout(() => {
+        sectionListRef.current?.scrollToLocation({
+          sectionIndex: 0,
+          itemIndex: Math.min(info.index, info.highestMeasuredFrameIndex),
+          animated: true,
+        });
+      }, 100);
+    },
+    []
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.systemGroupedBackground }}>
@@ -408,6 +432,7 @@ export default function PokedexScreen() {
         renderSectionHeader={renderSectionHeader}
         keyExtractor={keyExtractor}
         stickySectionHeadersEnabled
+        onScrollToIndexFailed={onScrollToIndexFailed}
         contentContainerStyle={{
           paddingHorizontal: horizontalPadding - 4,
           paddingBottom: insets.bottom + 20,
