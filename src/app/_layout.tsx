@@ -2,7 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Stack from "expo-router/stack";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import AC from "@bacons/apple-colors";
+import { Colors } from "@/utils/colors";
 
 const AppleStackPreset: NativeStackNavigationOptions =
   process.env.EXPO_OS !== "ios"
@@ -16,7 +16,7 @@ const AppleStackPreset: NativeStackNavigationOptions =
           backgroundColor: "transparent",
         },
         headerTitleStyle: {
-          color: AC.label as any,
+          color: Colors.label,
         },
         headerBlurEffect: "none",
         headerBackButtonDisplayMode: "minimal",
