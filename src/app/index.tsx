@@ -479,7 +479,8 @@ export default function PokedexScreen() {
         style={{
           flexDirection: "row",
           justifyContent: "center",
-          paddingVertical: 8,
+          paddingTop: insets.top + 8,
+          paddingBottom: 8,
           paddingHorizontal: 8,
           gap: 4,
           backgroundColor: Colors.systemGroupedBackground,

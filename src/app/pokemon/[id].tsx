@@ -44,11 +44,20 @@ export default function PokemonDetailScreen() {
   );
 
   useEffect(() => {
-    if (pokemon) {
-      navigation.setOptions({
-        title: pokemon.name,
-      });
-    }
+    // Only set options after component is mounted and we have determined pokemon state
+    const timer = setTimeout(() => {
+      if (pokemon) {
+        navigation.setOptions({
+          title: pokemon.name,
+        });
+      } else {
+        navigation.setOptions({
+          title: "Pokemon",
+        });
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [pokemon, navigation]);
 
   if (!pokemon) {
@@ -73,9 +82,7 @@ export default function PokemonDetailScreen() {
   const imageSize = Math.min(width * 0.7, 300);
 
   return (
-    <>
-      <Stack.Screen options={{ title: pokemon.name }} />
-      <ScrollView
+    <ScrollView
         style={{ flex: 1, backgroundColor: Colors.systemGroupedBackground }}
         contentContainerStyle={{
           paddingBottom: insets.bottom + 40,
@@ -301,6 +308,5 @@ export default function PokemonDetailScreen() {
           </View>
         </View>
       </ScrollView>
-    </>
   );
 }
