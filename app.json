@@ -16,6 +16,7 @@
       "expo-router",
       "expo-web-browser",
       "@bacons/apple-colors"
-    ]
+    ],
+    "name": "Gen 9 Pokedex"
   }
 }
