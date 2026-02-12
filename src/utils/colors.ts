@@ -2,10 +2,19 @@
 // On iOS, uses @bacons/apple-colors for native semantic colors
 // On web, provides equivalent CSS values
 
-import AC from "@bacons/apple-colors";
-
 // Check if we're on web
 const isWeb = process.env.EXPO_OS === "web";
+
+// Safely import @bacons/apple-colors, handling cases where it might not be available
+let AC: any = {};
+try {
+  if (!isWeb) {
+    AC = require("@bacons/apple-colors").default || {};
+  }
+} catch (error) {
+  console.warn("@bacons/apple-colors not available, using fallback colors");
+  AC = {};
+}
 
 // Web fallback colors (light mode defaults, CSS will handle dark mode)
 const webColors = {
